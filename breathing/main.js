@@ -13,30 +13,31 @@ buttonText2.innerHTML = "Start (4s/4s/4s)";
 buttonText3.innerHTML = "Start (4s/8s/4s)";
 
 const disabled = {};
-let delayIn = 4000;
-let delayOut = 6000;
-let delayPause = 2000;
-let running = false;
-let timeoutIn = null;
-let timeoutHold = null;
-let timeoutOut = null;
+const conf = {};
+conf.delayIn = 4000;
+conf.delayOut = 6000;
+conf.delayPause = 2000;
+conf.running = false;
+conf.timeoutIn = null;
+conf.timeoutHold = null;
+conf.timeoutOut = null;
 
 function setMode1() {
-    delayIn = 4000;
-    delayOut = 6000;
-    delayPause = 2000;
+    conf.delayIn = 4000;
+    conf.delayOut = 6000;
+    conf.delayPause = 2000;
 }
 
 function setMode2() {
-    delayIn = 4000;
-    delayOut = 4000;
-    delayPause = 4000;
+    conf.delayIn = 4000;
+    conf.delayOut = 4000;
+    conf.delayPause = 4000;
 }
 
 function setMode3() {
-    delayIn = 4000;
-    delayOut = 8000;
-    delayPause = 4000;
+    conf.delayIn = 4000;
+    conf.delayOut = 8000;
+    conf.delayPause = 4000;
 }
 
 function clearText() {
@@ -52,20 +53,20 @@ function clickHandler(onStart, onStop, id) {
         return;
     }
 
-    if (running) {
-        clearTimeout(timeoutIn);
-        clearTimeout(timeoutHold);
-        clearTimeout(timeoutOut);
+    if (conf.running) {
+        clearTimeout(conf.timeoutIn);
+        clearTimeout(conf.timeoutHold);
+        clearTimeout(conf.timeoutOut);
         circle.style.transition = "none";
         circle.style.width = "234px";
         circle.style.height = "234px";
         clearText();
         onStop();
     } else {
-        pulseIn();
         onStart();
+        pulseIn();
     }
-    running = !running;
+    conf.running = !conf.running;
 }
 
 function disable(buttons) {
@@ -120,19 +121,19 @@ button3.onclick = () => clickHandler(
 );
 
 function pulseIn() {
-    circle.style.transition = `all ${delayIn}ms linear`;
+    circle.style.transition = `all ${conf.delayIn}ms linear`;
     circle.style.width = "8px";
     circle.style.height = "8px";
     circleText.innerHTML = "Breathe in";
-    timeoutHold = setTimeout(setHoldText, delayIn);
-    timeoutOut = setTimeout(pulseOut, delayIn + delayPause);
+    conf.timeoutHold = setTimeout(setHoldText, conf.delayIn);
+    conf.timeoutOut = setTimeout(pulseOut, conf.delayIn + conf.delayPause);
 }
 
 function pulseOut() {
-    circle.style.transition = `all ${delayOut}ms linear`;
+    circle.style.transition = `all ${conf.delayOut}ms linear`;
     circle.style.width = "234px";
     circle.style.height = "234px";
     circleText.innerHTML = "Breathe out";
-    timeoutHold = setTimeout(setHoldText, delayOut);
-    timeoutIn = setTimeout(pulseIn, delayOut + delayPause);
+    conf.timeoutHold = setTimeout(setHoldText, conf.delayOut);
+    conf.timeoutIn = setTimeout(pulseIn, conf.delayOut + conf.delayPause);
 }
