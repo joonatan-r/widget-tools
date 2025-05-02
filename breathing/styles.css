@@ -17,6 +17,7 @@
     height: 250px;
     padding: 0;
     margin: 0;
+    margin-bottom: 20px;
     border: 10px solid black;
     -webkit-border-radius: 100%;
     -moz-border-radius: 100%;
@@ -35,26 +36,49 @@
 }
 
 #circleText {
-    font: 2em "Fira Sans", sans-serif;
+    font: 3em "Fira Sans", sans-serif;
     position: absolute;
+}
+
+#spinDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 10px;
+    height: 282px;
+    position: absolute;
+    visibility: hidden;
+}
+
+#dotDiv {
+    width: 10px;
+    height: 10px;
+    background-color: lightseagreen;
+    border: 8px solid black;
+    -webkit-border-radius: 100%;
+    -moz-border-radius: 100%;
+    border-radius: 100%;
 }
 
 .button {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 20px;
-    width: 200px;
+    margin-top: 5px;
+    width: 150px;
     height: 50px;
     background-color: lightseagreen;
-    border: 2px solid darkcyan;
+    border-right: 2px solid darkcyan;
+    border-bottom: 2px solid darkcyan;
     border-radius: 10px;
     transition: all 25ms linear;
 }
 
 .button.disabled {
     background-color: gray;
-    border: 2px solid darkgray;
+    border-right: 2px solid darkgray;
+    border-bottom: 2px solid darkgray;
 }
 
 .button.disabled:hover {

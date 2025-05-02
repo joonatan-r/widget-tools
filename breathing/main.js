@@ -1,5 +1,6 @@
 
 const circle = document.getElementById("circle");
+const spinDiv = document.getElementById("spinDiv");
 const circleText = document.getElementById("circleText");
 const button1 = document.getElementById("button1");
 const buttonText1 = document.getElementById("buttonText1");
@@ -44,8 +45,12 @@ function clearText() {
     circleText.innerHTML = "";
 }
 
-function setHoldText() {
+function setHoldText(hide) {
     circleText.innerHTML = "Hold";
+    if (hide) circle.style.borderWidth = "0";
+    spinDiv.style.visibility = "visible";
+    spinDiv.style.transition = `all ${conf.delayPause}ms linear`;
+    spinDiv.style.transform = "rotate(360deg)";
 }
 
 function clickHandler(onStart, onStop, id) {
@@ -60,6 +65,9 @@ function clickHandler(onStart, onStop, id) {
         circle.style.transition = "none";
         circle.style.width = "234px";
         circle.style.height = "234px";
+        spinDiv.style.transition = `all 0ms linear`;
+        spinDiv.style.transform = "none";
+        spinDiv.style.visibility = "hidden";
         clearText();
         onStop();
     } else {
@@ -121,18 +129,25 @@ button3.onclick = () => clickHandler(
 );
 
 function pulseIn() {
-    circle.style.transition = `all ${conf.delayIn}ms linear`;
-    circle.style.width = "8px";
-    circle.style.height = "8px";
+    spinDiv.style.transition = `all 0ms linear`;
+    spinDiv.style.transform = "none";
+    spinDiv.style.visibility = "hidden";
+    circle.style.transition = `width ${conf.delayIn}ms linear, height ${conf.delayIn}ms linear`;
+    circle.style.width = "0px";
+    circle.style.height = "0px";
     circleText.innerHTML = "Breathe in";
-    conf.timeoutHold = setTimeout(setHoldText, conf.delayIn);
+    conf.timeoutHold = setTimeout(() => setHoldText(true), conf.delayIn);
     conf.timeoutOut = setTimeout(pulseOut, conf.delayIn + conf.delayPause);
 }
 
 function pulseOut() {
-    circle.style.transition = `all ${conf.delayOut}ms linear`;
+    spinDiv.style.transition = `all 0ms linear`;
+    spinDiv.style.transform = "none";
+    spinDiv.style.visibility = "hidden";
+    circle.style.transition = `width ${conf.delayOut}ms linear, height ${conf.delayOut}ms linear`;
     circle.style.width = "234px";
     circle.style.height = "234px";
+    circle.style.borderWidth = "8px";
     circleText.innerHTML = "Breathe out";
     conf.timeoutHold = setTimeout(setHoldText, conf.delayOut);
     conf.timeoutIn = setTimeout(pulseIn, conf.delayOut + conf.delayPause);
