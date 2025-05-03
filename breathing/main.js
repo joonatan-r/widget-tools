@@ -1,6 +1,7 @@
 
 const circle = document.getElementById("circle");
 const spinDiv = document.getElementById("spinDiv");
+const markDiv = document.getElementById("markDiv");
 const circleText = document.getElementById("circleText");
 const button1 = document.getElementById("button1");
 const buttonText1 = document.getElementById("buttonText1");
@@ -48,6 +49,7 @@ function clearText() {
 function setHoldText(hide) {
     circleText.innerHTML = "Hold";
     if (hide) circle.style.borderWidth = "0";
+    markDiv.style.visibility = "visible";
     spinDiv.style.visibility = "visible";
     spinDiv.style.transition = `all ${conf.delayPause}ms linear`;
     spinDiv.style.transform = "rotate(360deg)";
@@ -65,6 +67,7 @@ function clickHandler(onStart, onStop, id) {
         circle.style.transition = "none";
         circle.style.width = "234px";
         circle.style.height = "234px";
+        markDiv.style.visibility = "hidden";
         spinDiv.style.transition = `all 0ms linear`;
         spinDiv.style.transform = "none";
         spinDiv.style.visibility = "hidden";
@@ -129,6 +132,7 @@ button3.onclick = () => clickHandler(
 );
 
 function pulseIn() {
+    markDiv.style.visibility = "hidden";
     spinDiv.style.transition = `all 0ms linear`;
     spinDiv.style.transform = "none";
     spinDiv.style.visibility = "hidden";
@@ -141,6 +145,7 @@ function pulseIn() {
 }
 
 function pulseOut() {
+    markDiv.style.visibility = "hidden";
     spinDiv.style.transition = `all 0ms linear`;
     spinDiv.style.transform = "none";
     spinDiv.style.visibility = "hidden";
