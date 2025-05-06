@@ -22,9 +22,7 @@ conf.delayIn = 4000;
 conf.delayOut = 6000;
 conf.delayPause = 2000;
 conf.running = false;
-conf.timeoutIn = null;
 conf.timeoutHold = null;
-conf.timeoutOut = null;
 
 function setMode1() {
     conf.delayIn = 4000;
@@ -48,19 +46,32 @@ function clearText() {
     circleText.innerHTML = "";
 }
 
-function setHoldTextAndStartProgress(hide) {
+function setHoldTextAndStartProgress(isIn) {
     circleText.innerHTML = "Hold";
-    if (hide) circle.style.borderWidth = "0";
+    if (isIn) circle.style.borderWidth = "0";
     circleBgProgress.style.transition = `all ${conf.delayPause / 2}ms linear`;
     circleBgProgress.style.transform = "rotate(180deg)";
-    circleBgProgress.addEventListener("transitionend", finishProgress);
+    if (isIn) {
+        circleBgProgress.addEventListener("transitionend", finishProgressIn);
+    } else {
+        circleBgProgress.addEventListener("transitionend", finishProgressOut);
+    }
 }
 
-function finishProgress() {
+function finishProgressIn() {
+    circleBgProgress.removeEventListener("transitionend", finishProgressIn);
     circleBgRight.style.backgroundColor = "lightseagreen";
     circleBgLeft.style.zIndex = 2;
     circleBgProgress.style.transform = "rotate(360deg)";
-    circleBgProgress.removeEventListener("transitionend", finishProgress);
+    circleBgProgress.addEventListener("transitionend", pulseOut);
+}
+
+function finishProgressOut() {
+    circleBgProgress.removeEventListener("transitionend", finishProgressOut);
+    circleBgRight.style.backgroundColor = "lightseagreen";
+    circleBgLeft.style.zIndex = 2;
+    circleBgProgress.style.transform = "rotate(360deg)";
+    circleBgProgress.addEventListener("transitionend", pulseIn);
 }
 
 function clickHandler(onStart, onStop, id) {
@@ -69,10 +80,11 @@ function clickHandler(onStart, onStop, id) {
     }
 
     if (conf.running) {
-        clearTimeout(conf.timeoutIn);
         clearTimeout(conf.timeoutHold);
-        circleBgProgress.removeEventListener("transitionend", finishProgress);
-        clearTimeout(conf.timeoutOut);
+        circleBgProgress.removeEventListener("transitionend", finishProgressIn);
+        circleBgProgress.removeEventListener("transitionend", finishProgressOut);
+        circleBgProgress.removeEventListener("transitionend", pulseOut);
+        circleBgProgress.removeEventListener("transitionend", pulseIn);
         circle.style.transition = "none";
         circle.style.width = "237px";
         circle.style.height = "237px";
@@ -142,6 +154,7 @@ button3.onclick = () => clickHandler(
 );
 
 function pulseIn() {
+    circleBgProgress.removeEventListener("transitionend", pulseIn);
     circleBgProgress.style.transition = `all 0ms linear`;
     circleBgProgress.style.transform = "none";
     circleBgRight.style.backgroundColor = "black";
@@ -151,10 +164,10 @@ function pulseIn() {
     circle.style.height = "0px";
     circleText.innerHTML = "Breathe in";
     conf.timeoutHold = setTimeout(() => setHoldTextAndStartProgress(true), conf.delayIn);
-    conf.timeoutOut = setTimeout(pulseOut, conf.delayIn + conf.delayPause);
 }
 
 function pulseOut() {
+    circleBgProgress.removeEventListener("transitionend", pulseOut);
     circleBgProgress.style.transition = `all 0ms linear`;
     circleBgProgress.style.transform = "none";
     circleBgRight.style.backgroundColor = "black";
@@ -165,5 +178,4 @@ function pulseOut() {
     circle.style.borderWidth = "8px";
     circleText.innerHTML = "Breathe out";
     conf.timeoutHold = setTimeout(setHoldTextAndStartProgress, conf.delayOut);
-    conf.timeoutIn = setTimeout(pulseIn, conf.delayOut + conf.delayPause);
 }
