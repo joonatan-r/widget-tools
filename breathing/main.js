@@ -25,7 +25,6 @@ conf.running = false;
 conf.timeoutIn = null;
 conf.timeoutHold = null;
 conf.timeoutOut = null;
-conf.timeoutHoldHalf = null;
 
 function setMode1() {
     conf.delayIn = 4000;
@@ -54,12 +53,14 @@ function setHoldTextAndStartProgress(hide) {
     if (hide) circle.style.borderWidth = "0";
     circleBgProgress.style.transition = `all ${conf.delayPause / 2}ms linear`;
     circleBgProgress.style.transform = "rotate(180deg)";
+    circleBgProgress.addEventListener("transitionend", finishProgress);
 }
 
 function finishProgress() {
     circleBgRight.style.backgroundColor = "lightseagreen";
     circleBgLeft.style.zIndex = 2;
     circleBgProgress.style.transform = "rotate(360deg)";
+    circleBgProgress.removeEventListener("transitionend", finishProgress);
 }
 
 function clickHandler(onStart, onStop, id) {
@@ -70,11 +71,12 @@ function clickHandler(onStart, onStop, id) {
     if (conf.running) {
         clearTimeout(conf.timeoutIn);
         clearTimeout(conf.timeoutHold);
-        clearTimeout(conf.timeoutHoldHalf);
+        circleBgProgress.removeEventListener("transitionend", finishProgress);
         clearTimeout(conf.timeoutOut);
         circle.style.transition = "none";
         circle.style.width = "237px";
         circle.style.height = "237px";
+        circle.style.borderWidth = "8px";
         circleBgRight.style.backgroundColor = "black";
         circleBgLeft.style.zIndex = 4;
         circleBgProgress.style.transition = `all 0ms linear`;
@@ -149,7 +151,6 @@ function pulseIn() {
     circle.style.height = "0px";
     circleText.innerHTML = "Breathe in";
     conf.timeoutHold = setTimeout(() => setHoldTextAndStartProgress(true), conf.delayIn);
-    conf.timeoutHoldHalf = setTimeout(finishProgress, conf.delayIn + (conf.delayPause / 2));
     conf.timeoutOut = setTimeout(pulseOut, conf.delayIn + conf.delayPause);
 }
 
@@ -164,6 +165,5 @@ function pulseOut() {
     circle.style.borderWidth = "8px";
     circleText.innerHTML = "Breathe out";
     conf.timeoutHold = setTimeout(setHoldTextAndStartProgress, conf.delayOut);
-    conf.timeoutHoldHalf = setTimeout(finishProgress, conf.delayOut + (conf.delayPause / 2));
     conf.timeoutIn = setTimeout(pulseIn, conf.delayOut + conf.delayPause);
 }
