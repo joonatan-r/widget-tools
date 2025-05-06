@@ -1,7 +1,9 @@
 
 const circle = document.getElementById("circle");
-const spinDiv = document.getElementById("spinDiv");
-const markDiv = document.getElementById("markDiv");
+const circleBg = document.getElementById("circleBg");
+const circleBgLeft = document.getElementById("circleBgLeft");
+const circleBgRight = document.getElementById("circleBgRight");
+const circleBgProgress = document.getElementById("circleBgProgress");
 const circleText = document.getElementById("circleText");
 const button1 = document.getElementById("button1");
 const buttonText1 = document.getElementById("buttonText1");
@@ -23,6 +25,7 @@ conf.running = false;
 conf.timeoutIn = null;
 conf.timeoutHold = null;
 conf.timeoutOut = null;
+conf.timeoutHoldHalf = null;
 
 function setMode1() {
     conf.delayIn = 4000;
@@ -46,13 +49,17 @@ function clearText() {
     circleText.innerHTML = "";
 }
 
-function setHoldText(hide) {
+function setHoldTextAndStartProgress(hide) {
     circleText.innerHTML = "Hold";
     if (hide) circle.style.borderWidth = "0";
-    markDiv.style.visibility = "visible";
-    spinDiv.style.visibility = "visible";
-    spinDiv.style.transition = `all ${conf.delayPause}ms linear`;
-    spinDiv.style.transform = "rotate(360deg)";
+    circleBgProgress.style.transition = `all ${conf.delayPause / 2}ms linear`;
+    circleBgProgress.style.transform = "rotate(180deg)";
+}
+
+function finishProgress() {
+    circleBgRight.style.backgroundColor = "lightseagreen";
+    circleBgLeft.style.zIndex = 2;
+    circleBgProgress.style.transform = "rotate(360deg)";
 }
 
 function clickHandler(onStart, onStop, id) {
@@ -63,14 +70,15 @@ function clickHandler(onStart, onStop, id) {
     if (conf.running) {
         clearTimeout(conf.timeoutIn);
         clearTimeout(conf.timeoutHold);
+        clearTimeout(conf.timeoutHoldHalf);
         clearTimeout(conf.timeoutOut);
         circle.style.transition = "none";
-        circle.style.width = "234px";
-        circle.style.height = "234px";
-        markDiv.style.visibility = "hidden";
-        spinDiv.style.transition = `all 0ms linear`;
-        spinDiv.style.transform = "none";
-        spinDiv.style.visibility = "hidden";
+        circle.style.width = "237px";
+        circle.style.height = "237px";
+        circleBgRight.style.backgroundColor = "black";
+        circleBgLeft.style.zIndex = 4;
+        circleBgProgress.style.transition = `all 0ms linear`;
+        circleBgProgress.style.transform = "none";
         clearText();
         onStop();
     } else {
@@ -132,28 +140,30 @@ button3.onclick = () => clickHandler(
 );
 
 function pulseIn() {
-    markDiv.style.visibility = "hidden";
-    spinDiv.style.transition = `all 0ms linear`;
-    spinDiv.style.transform = "none";
-    spinDiv.style.visibility = "hidden";
+    circleBgProgress.style.transition = `all 0ms linear`;
+    circleBgProgress.style.transform = "none";
+    circleBgRight.style.backgroundColor = "black";
+    circleBgLeft.style.zIndex = 4;
     circle.style.transition = `width ${conf.delayIn}ms linear, height ${conf.delayIn}ms linear`;
     circle.style.width = "0px";
     circle.style.height = "0px";
     circleText.innerHTML = "Breathe in";
-    conf.timeoutHold = setTimeout(() => setHoldText(true), conf.delayIn);
+    conf.timeoutHold = setTimeout(() => setHoldTextAndStartProgress(true), conf.delayIn);
+    conf.timeoutHoldHalf = setTimeout(finishProgress, conf.delayIn + (conf.delayPause / 2));
     conf.timeoutOut = setTimeout(pulseOut, conf.delayIn + conf.delayPause);
 }
 
 function pulseOut() {
-    markDiv.style.visibility = "hidden";
-    spinDiv.style.transition = `all 0ms linear`;
-    spinDiv.style.transform = "none";
-    spinDiv.style.visibility = "hidden";
+    circleBgProgress.style.transition = `all 0ms linear`;
+    circleBgProgress.style.transform = "none";
+    circleBgRight.style.backgroundColor = "black";
+    circleBgLeft.style.zIndex = 4;
     circle.style.transition = `width ${conf.delayOut}ms linear, height ${conf.delayOut}ms linear`;
-    circle.style.width = "234px";
-    circle.style.height = "234px";
+    circle.style.width = "237px";
+    circle.style.height = "237px";
     circle.style.borderWidth = "8px";
     circleText.innerHTML = "Breathe out";
-    conf.timeoutHold = setTimeout(setHoldText, conf.delayOut);
+    conf.timeoutHold = setTimeout(setHoldTextAndStartProgress, conf.delayOut);
+    conf.timeoutHoldHalf = setTimeout(finishProgress, conf.delayOut + (conf.delayPause / 2));
     conf.timeoutIn = setTimeout(pulseIn, conf.delayOut + conf.delayPause);
 }

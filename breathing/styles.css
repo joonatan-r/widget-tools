@@ -9,24 +9,79 @@
     justify-content: center;
 }
 
+#circleBg {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background-color: black;
+    width: 270px;
+    height: 270px;
+    -webkit-border-radius: 100%;
+    -moz-border-radius: 100%;
+    border-radius: 100%;
+    margin-bottom: 20px;
+    overflow: hidden;
+    z-index: 3;
+}
+
+#circleBgLeft {
+    height: 100%;
+    width: 100%;
+    background-color: black;
+    z-index: 4;
+}
+
+#circleBgRight {
+    height: 100%;
+    width: 100%;
+    background-color: black;
+    z-index: 2;
+}
+
+#circleBgProgress {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    z-index: 3;
+}
+
+#progressLeft {
+    height: 100%;
+    width: 100%;
+    background-color: lightseagreen;
+}
+
+#progressRight {
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0);
+}
+
 #circlebase {
     display: flex;
     align-items: center;
     justify-content: center;
+    position: absolute;
     width: 250px;
     height: 250px;
     padding: 0;
     margin: 0;
-    margin-bottom: 20px;
-    border: 10px solid black;
     -webkit-border-radius: 100%;
     -moz-border-radius: 100%;
     border-radius: 100%;
+    background-color: white;
+    z-index: 4;
 }
 
 #circle {
-    width: 234px;
-    height: 234px;
+    width: 237px;
+    height: 237px;
     padding: 0;
     margin: 0;
     border: 8px solid lightseagreen;
@@ -38,50 +93,6 @@
 #circleText {
     font: 3em "Fira Sans", sans-serif;
     position: absolute;
-}
-
-#spinDiv {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    width: 10px;
-    height: 282px;
-    position: absolute;
-    visibility: hidden;
-}
-
-#markDiv {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    width: 10px;
-    height: 282px;
-    position: absolute;
-    visibility: hidden;
-}
-
-#markDotDiv {
-    width: 10px;
-    height: 10px;
-    margin-left: -8px;
-    background-color: white;
-    border: 8px solid black;
-    -webkit-border-radius: 100%;
-    -moz-border-radius: 100%;
-    border-radius: 100%;
-}
-
-#dotDiv {
-    width: 10px;
-    height: 10px;
-    margin-left: -8px;
-    background-color: lightseagreen;
-    border: 8px solid black;
-    -webkit-border-radius: 100%;
-    -moz-border-radius: 100%;
-    border-radius: 100%;
 }
 
 .button {
